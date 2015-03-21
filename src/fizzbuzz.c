@@ -48,6 +48,7 @@ static fizzbuzz_handler const actions[ 15 ] =
 
 unsigned long int mod15( unsigned long int const i )
 {
+    /* TODO: think of something to get rid of that modulus */
     return i % 15;
 }
 
