@@ -105,7 +105,7 @@ int main( int argc, char * argv[] )
         unsigned long int iterator = 0;
 
     MAIN_LOOP:
-        ( main_loop[ !!( iterator ^ from_user ) ] )( &iterator );
+        ( main_loop[ 0 != ( iterator ^ from_user ) ] )( &iterator );
         goto MAIN_LOOP;
     }
 
