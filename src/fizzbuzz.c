@@ -4,25 +4,25 @@
 
 typedef void ( * fizzbuzz_handler )( unsigned long int const i );
 
-void handle_fizz( unsigned long int const i )
+static void handle_fizz( unsigned long int const i )
 {
     ( void ) i;
     ( void ) puts( "fizz" );
 }
 
-void handle_buzz( unsigned long int const i )
+static void handle_buzz( unsigned long int const i )
 {
     ( void ) i;
     ( void ) puts( "buzz" );
 }
 
-void handle_fizzbuzz( unsigned long int const i )
+static void handle_fizzbuzz( unsigned long int const i )
 {
     ( void ) i;
     ( void ) puts( "fizzbuzz" );
 }
 
-void handle_number( unsigned long int const i )
+static void handle_number( unsigned long int const i )
 {
     ( void ) printf( "%lu\n", i );
 }
@@ -46,27 +46,33 @@ static fizzbuzz_handler const actions[ 15 ] =
     handle_fizzbuzz
 };
 
-unsigned long int mod15( unsigned long int const i )
+static unsigned long int div15( unsigned long int const i )
 {
-    /* TODO: think of something to get rid of that modulus */
-    return i % 15;
+    /* TODO: get rid of the division somehow */
+    return i / 15;
 }
 
-void fizzbuzz( unsigned long int const i )
+static unsigned long int mod15( unsigned long int const i )
+{
+    unsigned long int const division = div15( i );
+    return i - (( division << 4 ) - division );
+}
+
+static void fizzbuzz( unsigned long int const i )
 {
     ( actions[ mod15( i - 1 ) ] )( i );
 }
 
 typedef void ( * fn )( unsigned long int * const i );
 
-void usage( unsigned long int * const i )
+static void usage( unsigned long int * const i )
 {
     ( void ) i;
     ( void ) puts( "Usage: fizzbuzz <inclusive limit>" );
     exit( EXIT_FAILURE );
 }
 
-void noop( unsigned long int * const i )
+static void noop( unsigned long int * const i )
 {
     ( void ) i;
 }
@@ -77,13 +83,13 @@ static fn const argc_check[ 2 ] =
     noop
 };
 
-void breakout( unsigned long int * const i )
+static void breakout( unsigned long int * const i )
 {
     ( void ) i;
     exit( EXIT_SUCCESS );
 }
 
-void operation( unsigned long int * const i )
+static void operation( unsigned long int * const i )
 {
     fizzbuzz( *i + 1 );
     *i = *i + 1;
