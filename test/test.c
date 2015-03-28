@@ -33,7 +33,7 @@ int main( int argc, char * args[] )
     {
         unsigned long int i;
 
-        for( i = 0; i < ULONG_MAX; ++i )
+        for( i = 0; i < 100000000U; ++i )
         {
             assert(( i / 15 ) == div15( i ));
         }
@@ -46,7 +46,7 @@ int main( int argc, char * args[] )
     {
         unsigned long int i;
 
-        for( i = 0; i < ULONG_MAX; ++i )
+        for( i = 0; i < 100000000U; ++i )
         {
             assert(( i % 15 ) == mod15( i ));
         }
