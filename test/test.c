@@ -35,10 +35,10 @@ int main( int argc, char * args[] )
 
         for( i = 0; i < ULONG_MAX; ++i )
         {
-            assert(( i % 15 ) == div15( i ));
+            assert(( i / 15 ) == div15( i ));
         }
 
-        assert(( ULONG_MAX % 15 ) == div15( ULONG_MAX ));
+        assert(( ULONG_MAX / 15 ) == div15( ULONG_MAX ));
     }
     puts( "ok" );
 
