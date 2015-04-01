@@ -126,7 +126,7 @@ int main( int argc, char * argv[] )
     };
 
     /* argc is always at least 1 */
-    ( argc_check[ !!( argc - 1 ) ] )( NULL );
+    ( argc_check[ 0 != ( argc - 1 ) ] )( NULL );
 
     {
         static fn const main_loop[ 2 ] =
