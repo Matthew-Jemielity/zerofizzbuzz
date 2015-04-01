@@ -2,8 +2,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef void ( * fizzbuzz_handler )( unsigned long int const i );
-
 static void handle_fizz( unsigned long int const i )
 {
     ( void ) i;
@@ -26,25 +24,6 @@ static void handle_number( unsigned long int const i )
 {
     ( void ) printf( "%lu\n", i );
 }
-
-static fizzbuzz_handler const actions[ 15 ] =
-{
-    handle_number,
-    handle_number,
-    handle_fizz,
-    handle_number,
-    handle_buzz,
-    handle_fizz,
-    handle_number,
-    handle_number,
-    handle_fizz,
-    handle_buzz,
-    handle_number,
-    handle_fizz,
-    handle_number,
-    handle_number,
-    handle_fizzbuzz
-};
 
 static unsigned long int div15_exit(
     unsigned long int const i,
@@ -88,6 +67,27 @@ static unsigned long int mod15( unsigned long int const i )
 
 static void fizzbuzz( unsigned long int const i )
 {
+    typedef void ( * fizzbuzz_handler )( unsigned long int const i );
+
+    static fizzbuzz_handler const actions[ 15 ] =
+    {
+        handle_number,
+        handle_number,
+        handle_fizz,
+        handle_number,
+        handle_buzz,
+        handle_fizz,
+        handle_number,
+        handle_number,
+        handle_fizz,
+        handle_buzz,
+        handle_number,
+        handle_fizz,
+        handle_number,
+        handle_number,
+        handle_fizzbuzz
+    };
+
     ( actions[ mod15( i - 1 ) ] )( i );
 }
 
