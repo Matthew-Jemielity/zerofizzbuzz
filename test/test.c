@@ -9,13 +9,40 @@
  **/
 
 #include <assert.h> /* assert */
-#include <limits.h> /* ULONG_MAX */
 #include <stdio.h> /* puts */
+
+static unsigned long int div15_exit(
+    unsigned long int const i,
+    unsigned long int const result
+)
+{
+    ( void ) i;
+    return result - 1;
+}
+
+static unsigned long int div15_loop(
+    unsigned long int const i,
+    unsigned long int const result
+)
+{
+    typedef unsigned long int (* div_loop_func)(
+        unsigned long int const i,
+        unsigned long int const result
+    );
+
+    static div_loop_func const divider[ 2 ] =
+    {
+        div15_exit,
+        div15_loop
+    };
+
+    return divider[ i >= 15 ]( i - 15, result + 1 );
+}
 
 static unsigned long int div15( unsigned long int const i )
 {
-    /* TODO: get rid of the division somehow */
-    return i / 15;
+
+    return div15_loop( i, 0 );
 }
 
 static unsigned long int mod15( unsigned long int const i )
@@ -26,32 +53,31 @@ static unsigned long int mod15( unsigned long int const i )
 
 int main( int argc, char * args[] )
 {
+    unsigned long int const limit = 1000000U;
+
     ( void ) argc;
     ( void ) args;
 
-    puts( "testing div15" );
+    printf( "testing div15: 0 to %lu\n", limit );
     {
         unsigned long int i;
 
-        for( i = 0; i < 100000000U; ++i )
+        for( i = 0; i < limit; ++i )
         {
             assert(( i / 15 ) == div15( i ));
         }
-
-        assert(( ULONG_MAX / 15 ) == div15( ULONG_MAX ));
     }
     puts( "ok" );
 
-    puts( "testing mod15" );
+    printf( "testing mod15: 0 to %lu\n", limit );
     {
         unsigned long int i;
 
-        for( i = 0; i < 100000000U; ++i )
+        for( i = 0; i < limit; ++i )
         {
             assert(( i % 15 ) == mod15( i ));
         }
 
-        assert(( ULONG_MAX % 15 ) == mod15( ULONG_MAX ));
     }
     puts( "ok" );
 

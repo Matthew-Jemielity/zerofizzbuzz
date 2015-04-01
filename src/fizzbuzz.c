@@ -46,10 +46,38 @@ static fizzbuzz_handler const actions[ 15 ] =
     handle_fizzbuzz
 };
 
+static unsigned long int div15_exit(
+    unsigned long int const i,
+    unsigned long int const result
+)
+{
+    ( void ) i;
+    return result - 1;
+}
+
+static unsigned long int div15_loop(
+    unsigned long int const i,
+    unsigned long int const result
+)
+{
+    typedef unsigned long int (* div_loop_func)(
+        unsigned long int const i,
+        unsigned long int const result
+    );
+
+    static div_loop_func const divider[ 2 ] =
+    {
+        div15_exit,
+        div15_loop
+    };
+
+    return divider[ i >= 15 ]( i - 15, result + 1 );
+}
+
 static unsigned long int div15( unsigned long int const i )
 {
-    /* TODO: get rid of the division somehow */
-    return i / 15;
+
+    return div15_loop( i, 0 );
 }
 
 static unsigned long int mod15( unsigned long int const i )
@@ -63,8 +91,6 @@ static void fizzbuzz( unsigned long int const i )
     ( actions[ mod15( i - 1 ) ] )( i );
 }
 
-typedef void ( * fn )( unsigned long int * const i );
-
 static void usage( unsigned long int * const i )
 {
     ( void ) i;
@@ -76,12 +102,6 @@ static void noop( unsigned long int * const i )
 {
     ( void ) i;
 }
-
-static fn const argc_check[ 2 ] =
-{
-    usage,
-    noop
-};
 
 static void breakout( unsigned long int * const i )
 {
@@ -95,18 +115,26 @@ static void operation( unsigned long int * const i )
     *i = *i + 1;
 }
 
-static fn const main_loop[ 2 ] =
-{
-    breakout,
-    operation
-};
-
 int main( int argc, char * argv[] )
 {
+    typedef void ( * fn )( unsigned long int * const i );
+
+    static fn const argc_check[ 2 ] =
+    {
+        usage,
+        noop
+    };
+
     /* argc is always at least 1 */
     ( argc_check[ !!( argc - 1 ) ] )( NULL );
 
     {
+        static fn const main_loop[ 2 ] =
+        {
+            breakout,
+            operation
+        };
+
         unsigned long int const from_user = strtoul( argv[ 1 ], NULL, 10 );
         unsigned long int iterator = 0;
 
