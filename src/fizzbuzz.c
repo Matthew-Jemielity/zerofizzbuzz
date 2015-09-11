@@ -91,16 +91,15 @@ static void fizzbuzz( unsigned long int const i )
     ( actions[ mod15( i - 1 ) ] )( i );
 }
 
-static void usage( unsigned long int * const i )
+static void usage( void )
 {
-    ( void ) i;
-    ( void ) puts( "Usage: fizzbuzz <inclusive limit>" );
+    ( void ) puts( "Usage: fizzbuzz <inclusive positive limit>" );
     exit( EXIT_FAILURE );
 }
 
-static void noop( unsigned long int * const i )
+static void noop( void )
 {
-    ( void ) i;
+    /* do nothing */
 }
 
 static void breakout( unsigned long int * const i )
@@ -117,17 +116,20 @@ static void operation( unsigned long int * const i )
 
 int main( int argc, char * argv[] )
 {
-    typedef void ( * fn )( unsigned long int * const i );
-
-    static fn const argc_check[ 2 ] =
     {
-        usage,
-        noop
-    };
+        typedef void ( * fn )( void );
 
-    ( argc_check[ 2 == argc ] )( NULL );
+        static fn const argc_check[ 2 ] =
+        {
+            usage,
+            noop
+        };
+
+        ( argc_check[ 2 == argc ] )();
+    }
 
     {
+        typedef void ( * fn )( unsigned long int * const i );
         static fn const main_loop[ 2 ] =
         {
             breakout,
@@ -135,10 +137,10 @@ int main( int argc, char * argv[] )
         };
 
         unsigned long int const from_user = strtoul( argv[ 1 ], NULL, 10 );
-        unsigned long int iterator = 0;
+        unsigned long int iterator = 0U;
 
     MAIN_LOOP:
-        ( main_loop[ 0 != ( iterator ^ from_user ) ] )( &iterator );
+        ( main_loop[ from_user != iterator ] )( &iterator );
         goto MAIN_LOOP;
     }
 

@@ -1,2 +1,2 @@
 # zerofizzbuzz
-Zero conditionals (one iffy boolean), zero divisions, zero modulos: fizz buzz.
+Zero conditionals (some iffy booleans), zero divisions, zero modulos: fizz buzz.
