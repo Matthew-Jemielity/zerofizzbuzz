@@ -108,10 +108,27 @@ static void breakout( unsigned long int * const i )
     exit( EXIT_SUCCESS );
 }
 
-static void operation( unsigned long int * const i )
+static void main_operation( unsigned long int * const i )
 {
     fizzbuzz( *i + 1 );
     *i = *i + 1;
+}
+
+static void main_loop(
+    unsigned long int const from_user,
+    unsigned long int * const iterator
+)
+{
+    typedef void ( * fn )( unsigned long int * const i );
+    static fn const operation[ 2 ] =
+    {
+        breakout,
+        main_operation
+    };
+
+    ( operation[ from_user != *iterator ] )( iterator );
+
+    main_loop( from_user, iterator );
 }
 
 int main( int argc, char * argv[] )
@@ -129,19 +146,10 @@ int main( int argc, char * argv[] )
     }
 
     {
-        typedef void ( * fn )( unsigned long int * const i );
-        static fn const main_loop[ 2 ] =
-        {
-            breakout,
-            operation
-        };
-
         unsigned long int const from_user = strtoul( argv[ 1 ], NULL, 10 );
         unsigned long int iterator = 0U;
 
-    MAIN_LOOP:
-        ( main_loop[ from_user != iterator ] )( &iterator );
-        goto MAIN_LOOP;
+        main_loop( from_user, &iterator );
     }
 
     /* never reached */
